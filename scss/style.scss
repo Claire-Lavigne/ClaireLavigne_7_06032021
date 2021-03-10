@@ -1,0 +1,87 @@
+@import "variable_overrides";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../node_modules/bootstrap-icons/font/bootstrap-icons.css";
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+.btn-success {
+  color: $white;
+}
+
+header {
+  form {
+    position: relative;
+    .btn-outline-success {
+      position: absolute;
+      right: 0;
+      color: $black;
+      border-color: transparent;
+      i::before {
+        font-weight: 900 !important;
+      }
+    }
+  }
+}
+.dropdown-toggle {
+  color: white !important;
+}
+
+
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1250px !important;
+  }
+header.container {
+  max-width: 1215px !important;
+}
+}
+
+.card {
+  max-width: 380px;
+}
+.row-cols-1 .card {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.row-cols-md-2 .card {
+  &:nth-child(3n + 3) {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+.card-title {
+  height: 42px;
+  width: 250px;
+  float: left;
+  font-size: 18px;
+}
+.card-time {
+  float: right;
+  font-weight: bold;
+}
+.card-list {
+  font-size: 12px;
+  width: 160px;
+  float: left;
+  ul {
+    padding: 0;
+    list-style: none;
+    span {
+      font-weight: bold;
+    }
+  }
+}
+.card-description {
+  height: 145px;
+  font-size: 12px;
+  width: 160px;
+  float: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical; 
+}

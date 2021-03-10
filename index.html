@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+  <header class="container p-0">
+    <nav class="navbar d-flex justify-content-center">
+      <a class="navbar-brand" href="#"><img src="./images/logo.svg" alt="Logo Les petits plats"></a>
+    </nav>
+
+    <form class="d-flex">
+      <input class="form-control me-2 bg-light px-3 py-4" type="search"
+        placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette" aria-label="Search">
+      <button class="btn btn-outline-success align-self-center" type="submit"><i class="bi bi-search"></i></button>
+    </form>
+
+    <div class="tags container mt-4 p-0">
+      <span class="btn btn-primary px-3 py-1">Coco <i class="bi bi-x-circle ml-2" role="img"
+          aria-label="Close tag"></i></span>
+    </div>
+
+    <div class="container mt-4 p-0">
+      <div class="btn-group mr-2 mb-4">
+        <button class="btn btn-primary dropdown-toggle p-3" type="button" id="dropdownIngredients"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          Ingredients <i class="bi bi-chevron-down ml-4"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownIngredients">
+          <li><a class="dropdown-item" href="#">Menu item</a></li>
+          <li><a class="dropdown-item" href="#">Menu item</a></li>
+          <li><a class="dropdown-item" href="#">Menu item</a></li>
+        </ul>
+      </div>
+      <div class="btn-group mr-2 mb-4">
+        <button class="btn btn-success dropdown-toggle p-3" type="button" id="dropdownAppareil"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          Appareil <i class="bi bi-chevron-down ml-4"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownAppareil">
+          <li><a class="dropdown-item" href="#">Menu item</a></li>
+          <li><a class="dropdown-item" href="#">Menu item</a></li>
+          <li><a class="dropdown-item" href="#">Menu item</a></li>
+        </ul>
+      </div>
+      <div class="btn-group mb-4">
+        <button class="btn btn-danger dropdown-toggle p-3" type="button" id="dropdownUstensiles"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          Ustensiles <i class="bi bi-chevron-down ml-4"></i>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownUstensiles">
+          <li><a class="dropdown-item" href="#">Menu item</a></li>
+          <li><a class="dropdown-item" href="#">Menu item</a></li>
+          <li><a class="dropdown-item" href="#">Menu item</a></li>
+        </ul>
+      </div>
+    </div>
+
+
+  </header>
+
+  <main class="container p-0">
+    <div class="row mx-0 row-cols-1 row-cols-md-3 g-4">
+      <template id="card_template">
+        <div class="card col my-4 p-0 h-100">
+          <img src="https://fakeimg.pl/380x180/" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h2 class="card-title"></h2>
+            <span class="card-time"></span>
+            <p class="card-text card-list"></p>
+            <p class="card-text card-description">Some quick example text to build on the card title and make up the bulk of the card's
+              content.</p>
+          </div>
+        </div>
+      </template>
+
+    </div>
+    <!-- Content here -->
+  </main>
+  <script src="./js/index.js" type="module"></script>
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+    crossorigin="anonymous"></script>
+
+</body>
+
+</html>
