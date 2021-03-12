@@ -44,27 +44,39 @@ fetchRecipes().then(recipes => {
   inputSearch.addEventListener('keyup', e => {
     const inputValue = inputSearch.value.trim().toLowerCase();
     if (inputValue.length >= 3) {
-       console.log(inputValue)
-       const cardsTitle = document.querySelectorAll('div.card .card-title');
-       const cardsIngredients = document.querySelectorAll('div.card li');
-       const cardsDescription = document.querySelectorAll('div.card .card-description');
-       
-       
-     //  if title contains inputvalue
-    // search in title/ingredients/description
-    // filter recettes
-    // btns keywords are actualized (advanced research)
+      console.log(inputValue)
+      const cardsTitle = document.querySelectorAll('div.card .card-title');
+      const cardsIngredients = document.querySelectorAll('div.card li');
+      const cardsDescription = document.querySelectorAll('div.card .card-description');
+
+
+      //  if title contains inputvalue
+      // search in title/ingredients/description
+      // filter recettes
+      // btns keywords are actualized (advanced research)
+      /*
+      // Loop through all list items, and hide those who don't match the search query
+      for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        txtValue = a.textContent || a.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          li[i].style.display = "";
+        } else {
+          li[i].style.display = "none";
+        }
+      }
+      */
     }
 
     if (e.keyCode === 13) { // "Enter"
       preventSearchSubmit;
     }
 
-   
+
   })
 
   // Search keywords in btns
- // keywords shown as tag after being choosed
+  // keywords shown as tag after being choosed
 
   const preventSearchSubmit = () => {
     submitSearch.addEventListener('click', e => {
