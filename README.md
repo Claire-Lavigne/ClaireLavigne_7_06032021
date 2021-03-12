@@ -1,2 +1,3 @@
 # Command lines
-- `sass --watch scss/style.scss:css/style.css`
+- `npm i`
+- `npm run dev`

@@ -1,4 +1,4 @@
-import Recipes from './Recipes.class.js';
+// import Recipes from './Recipes.class.js';
 
 async function fetchRecipes() {
   const response = await fetch('./js/recipes.json');
@@ -7,68 +7,42 @@ async function fetchRecipes() {
 }
 
 fetchRecipes().then(recipes => {
-
-  let appliance = [],
-    id = [],
-    ingredients = [],
-    servings = [],
-    ustencils = [],
-    array = [];
-
-
   const container = document.querySelector('main .row');
-
   const templateElt = document.querySelector('#card_template');
+
   recipes.forEach(keys => {
-    appliance.push(keys.appliance);
-    id.push(keys.id);
-
-    ingredients.push(keys.ingredients);
-
-    servings.push(keys.servings);
-    ustencils.push(keys.ustencils);
-
     const cardClone = document.importNode(templateElt.content, true);
     const titleElt = cardClone.querySelector('.card-title');
     const timeElt = cardClone.querySelector('.card-time');
     const listElt = cardClone.querySelector('.card-list');
     const descriptionElt = cardClone.querySelector('.card-description');
+    let ul;
 
     titleElt.innerHTML = keys.name;
     timeElt.innerHTML = `<i class="bi bi-clock"></i> ${keys.time} min`;
-    listElt.innerHTML = '';
     descriptionElt.innerHTML = keys.description;
     container.append(cardClone);
-  })
 
+    [keys.ingredients].forEach(array => {
+      let li, name, quantity, unit;
+      ul = document.createElement("ul");
 
-  const listElt = document.querySelectorAll('.card-list');
-  let ul;
-  ingredients.forEach(ingredient => {
-    let li, name, quantity, unit;
-    ul = document.createElement("ul");
-
-    ingredient.forEach(item => {
-      li = document.createElement("li");
-      (item.ingredient != undefined) ? name = item.ingredient : name = '';
-      (item.quantity != undefined) ? quantity = `: ${item.quantity}` : quantity = '';
-      (item.unit != undefined) ? unit = item.unit : unit = '';
-      li.innerHTML = `<span>${name}</span>${quantity}${unit}`;
-      ul.append(li)
+      array.forEach(object => {
+        li = document.createElement("li");
+        (object.ingredient != undefined) ? name = object.ingredient : name = '';
+        (object.quantity != undefined) ? quantity = `: ${object.quantity}` : quantity = '';
+        (object.unit != undefined) ? unit = object.unit : unit = '';
+        li.innerHTML = `<span>${name}</span>${quantity}${unit}`;
+        ul.append(li)
+      })
     })
-    console.log(ul)
+    listElt.append(ul)
   })
-  listElt.forEach(elt => {
-    elt.innerHTML = ul.outerHTML;
-  });
-
-
 
   // change dropdown icon on Open
   const dropdownElements = document.querySelectorAll('.btn-group')
   dropdownElements.forEach(dropdown => {
     dropdown.addEventListener('show.bs.dropdown', (e) => {
-      console.log(e.target.children[0].classList[1])
       e.target.children[0].classList.replace('bi-chevron-down', 'bi-chevron-up');
     })
     dropdown.addEventListener('hide.bs.dropdown', (e) => {
@@ -84,9 +58,3 @@ fetchRecipes().then(recipes => {
     })
   })
 });
-/*
-  photographers.forEach(data => {
-    const photographer = new Photographer(data);
-    main.innerHTML += photographer.generateArticle();
-  })
-*/
