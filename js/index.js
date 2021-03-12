@@ -39,6 +39,42 @@ fetchRecipes().then(recipes => {
     listElt.append(ul)
   })
 
+  const inputSearch = document.querySelector('input[type="search"]')
+  const submitSearch = document.querySelector('form button');
+  inputSearch.addEventListener('keyup', e => {
+    const inputValue = inputSearch.value.trim().toLowerCase();
+    if (inputValue.length >= 3) {
+       console.log(inputValue)
+       const cardsTitle = document.querySelectorAll('div.card .card-title');
+       const cardsIngredients = document.querySelectorAll('div.card li');
+       const cardsDescription = document.querySelectorAll('div.card .card-description');
+       
+       
+     //  if title contains inputvalue
+    // search in title/ingredients/description
+    // filter recettes
+    // btns keywords are actualized (advanced research)
+    }
+
+    if (e.keyCode === 13) { // "Enter"
+      preventSearchSubmit;
+    }
+
+   
+  })
+
+  // Search keywords in btns
+ // keywords shown as tag after being choosed
+
+  const preventSearchSubmit = () => {
+    submitSearch.addEventListener('click', e => {
+      e.preventDefault();
+      const inputValue = inputSearch.value.trim().toLowerCase();
+      console.log(inputValue)
+    });
+  }
+  preventSearchSubmit()
+
   // change dropdown icon on Open
   const dropdownElements = document.querySelectorAll('.btn-group')
   dropdownElements.forEach(dropdown => {
