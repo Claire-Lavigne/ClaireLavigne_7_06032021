@@ -10,6 +10,7 @@ fetchRecipes().then(recipes => {
   const container = document.querySelector('main .row');
   const templateElt = document.querySelector('#card_template');
 
+  let arr = [];
   recipes.forEach(keys => {
     const cardClone = document.importNode(templateElt.content, true);
     const titleElt = cardClone.querySelector('.card-title');
@@ -27,24 +28,31 @@ fetchRecipes().then(recipes => {
     container.append(cardClone);
 
     [keys.ingredients].forEach(array => {
-      let li, name, quantity, unit;
+      let name, quantity, unit;
       ul = document.createElement("ul");
 
       array.forEach(object => {
-        li = document.createElement("li");
         (object.ingredient != undefined) ? name = object.ingredient : name = '';
         (object.quantity != undefined) ? quantity = `: ${object.quantity}` : quantity = '';
         (object.unit != undefined) ? unit = object.unit : unit = '';
-        li.innerHTML = `<span>${name}</span>${quantity}${unit}`;
-        ul.append(li)
+        ul.innerHTML += `<li><span>${name}</span>${quantity}${unit}</li>`;
+        
+        // add list to btn
+        dropdownIngredients.innerHTML += `<li><a class="dropdown-item" href="#">${name}</a></li>`;
+
       })
     })
+    // add list to card
     listElt.append(ul)
-   
-    
-    dropdownIngredients.innerHTML += `<li><a class="dropdown-item" href="#">${keys.ingredients}</a></li>`;
+
+    // add list to btns
     dropdownAppareil.innerHTML += `<li><a class="dropdown-item" href="#">${keys.appliance}</a></li>`;
-    dropdownUstenciles.innerHTML += `<li><a class="dropdown-item" href="#">${keys.ustensils}</a></li>`;
+
+    keys.ustensils.forEach(array => {
+      dropdownUstenciles.innerHTML += `<li><a class="dropdown-item" href="#">${array}</a></li>`;
+    })
+
+
   })
 
   const inputSearch = document.querySelector('input[type="search"]')
