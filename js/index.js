@@ -1,4 +1,5 @@
 // import Recipes from './Recipes.class.js';
+let filterRecipes = [];
 
 async function fetchRecipes() {
   const response = await fetch('./js/recipes.json');
@@ -7,53 +8,8 @@ async function fetchRecipes() {
 }
 
 fetchRecipes().then(recipes => {
-  const container = document.querySelector('main .row');
-  const templateElt = document.querySelector('#card_template');
-
-  let arr = [];
-  recipes.forEach(keys => {
-    const cardClone = document.importNode(templateElt.content, true);
-    const titleElt = cardClone.querySelector('.card-title');
-    const timeElt = cardClone.querySelector('.card-time');
-    const listElt = cardClone.querySelector('.card-list');
-    const descriptionElt = cardClone.querySelector('.card-description');
-    const dropdownIngredients = document.querySelector('.dropdown-menu[aria-labelledby="dropdownIngredients"]');
-    const dropdownAppareil = document.querySelector('.dropdown-menu[aria-labelledby="dropdownAppareil"]');
-    const dropdownUstenciles = document.querySelector('.dropdown-menu[aria-labelledby="dropdownUstensiles"]');
-    let ul;
-
-    titleElt.innerHTML = keys.name;
-    timeElt.innerHTML = `<i class="bi bi-clock"></i> ${keys.time} min`;
-    descriptionElt.innerHTML = keys.description;
-    container.append(cardClone);
-
-    [keys.ingredients].forEach(array => {
-      let name, quantity, unit;
-      ul = document.createElement("ul");
-
-      array.forEach(object => {
-        (object.ingredient != undefined) ? name = object.ingredient : name = '';
-        (object.quantity != undefined) ? quantity = `: ${object.quantity}` : quantity = '';
-        (object.unit != undefined) ? unit = object.unit : unit = '';
-        ul.innerHTML += `<li><span>${name}</span>${quantity}${unit}</li>`;
-        
-        // add list to btn
-        dropdownIngredients.innerHTML += `<li><a class="dropdown-item" href="#">${name}</a></li>`;
-
-      })
-    })
-    // add list to card
-    listElt.append(ul)
-
-    // add list to btns
-    dropdownAppareil.innerHTML += `<li><a class="dropdown-item" href="#">${keys.appliance}</a></li>`;
-
-    keys.ustensils.forEach(array => {
-      dropdownUstenciles.innerHTML += `<li><a class="dropdown-item" href="#">${array}</a></li>`;
-    })
-
-
-  })
+  filterRecipes = [...recipes];
+  displayRecipes(filterRecipes)
 
   const inputSearch = document.querySelector('input[type="search"]')
   const submitSearch = document.querySelector('form button');
@@ -63,24 +19,48 @@ fetchRecipes().then(recipes => {
     const cards = document.querySelectorAll('div.card');
 
     if (inputValue.length >= 3) {
+      filterRecipes = [];
       console.log(inputValue)
+      recipes.forEach(recipe => {
 
-      cards.forEach(card => {
-        const cardTitle = card.querySelector('div.card .card-title');
-        const cardIngredients = card.querySelector('div.card li');
-        const cardDescription = card.querySelector('div.card .card-description');
-        console.log(cardTitle)
-        // filter cards : search in title/ingredients/description
-        if (cardTitle.innerText.toLowerCase().indexOf(inputValue) > -1
-          || cardIngredients.innerText.toLowerCase().indexOf(inputValue) > -1
-          || cardDescription.innerText.toLowerCase().indexOf(inputValue) > -1
+        let ingredientString = '';
+        recipe.ingredients.forEach(ingredient => {
+          ingredientString += ingredient.ingredient + ' ';
+        })
+        
+        let ustensilsString = '';
+        recipe.ustensils.forEach(ustensil => {
+          ustensilsString += ustensil + ' ';
+        })
+
+        if (recipe.name.toLowerCase().indexOf(inputValue) > -1
+          || recipe.description.toLowerCase().indexOf(inputValue) > -1
+          || recipe.appliance.toLowerCase().indexOf(inputValue) > -1
+          || ingredientString.toLowerCase().indexOf(inputValue) > -1
+          || ustensilsString.toLowerCase().indexOf(inputValue) > -1
         ) {
-          card.classList.replace('d-none', 'd-flex');
-        } else {
-          card.classList.replace('d-flex', 'd-none');
+          filterRecipes.push(recipe);
         }
       })
+      displayRecipes(filterRecipes)
 
+      /*
+            cards.forEach(card => {
+              const cardTitle = card.querySelector('div.card .card-title');
+              const cardIngredients = card.querySelector('div.card li');
+              const cardDescription = card.querySelector('div.card .card-description');
+              console.log(cardTitle)
+              // filter cards : search in title/ingredients/description
+              if (cardTitle.innerText.toLowerCase().indexOf(inputValue) > -1
+                || cardIngredients.innerText.toLowerCase().indexOf(inputValue) > -1
+                || cardDescription.innerText.toLowerCase().indexOf(inputValue) > -1
+              ) {
+                card.classList.replace('d-none', 'd-flex');
+              } else {
+                card.classList.replace('d-flex', 'd-none');
+              }
+            })
+      */
       if (document.querySelectorAll('.card.d-flex').length === 0) {
         document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
       } else {
@@ -135,3 +115,77 @@ fetchRecipes().then(recipes => {
     })
   })
 });
+
+
+function displayRecipes(recipes) {
+  let arr = [];
+  let arrtwo = [];
+  let arrthree = [];
+  const templateElt = document.querySelector('#card_template');
+  const container = document.querySelector('main .row');
+  container.innerText = '';
+  const dropdownUstenciles = document.querySelector('.dropdown-menu[aria-labelledby="dropdownUstensiles"]');
+  dropdownUstenciles.innerText = '';
+  const dropdownIngredients = document.querySelector('.dropdown-menu[aria-labelledby="dropdownIngredients"]');
+  dropdownIngredients.innerText = '';
+  const dropdownAppareil = document.querySelector('.dropdown-menu[aria-labelledby="dropdownAppareil"]');
+  dropdownAppareil.innerText = '';
+
+  recipes.forEach(keys => {
+    const cardClone = document.importNode(templateElt.content, true);
+    const titleElt = cardClone.querySelector('.card-title');
+    const timeElt = cardClone.querySelector('.card-time');
+    const listElt = cardClone.querySelector('.card-list');
+    const descriptionElt = cardClone.querySelector('.card-description');
+    let ul;
+
+    titleElt.innerHTML = keys.name;
+    timeElt.innerHTML = `<i class="bi bi-clock"></i> ${keys.time} min`;
+    descriptionElt.innerHTML = keys.description;
+    container.append(cardClone);
+
+    [keys.ingredients].forEach(array => {
+      let name, quantity, unit;
+      ul = document.createElement("ul");
+
+      array.forEach(object => {
+        (object.ingredient != undefined) ? name = object.ingredient : name = '';
+        (object.quantity != undefined) ? quantity = `: ${object.quantity}` : quantity = '';
+        (object.unit != undefined) ? unit = object.unit : unit = '';
+        ul.innerHTML += `<li><span>${name}</span>${quantity}${unit}</li>`;
+
+
+        arrthree.push(name)
+      })
+
+    })
+    // add list to card
+    listElt.append(ul)
+
+    arrtwo.push(keys.appliance)
+
+    keys.ustensils.forEach(array => {
+      arr.push(array)
+    })
+
+
+  })
+
+  let ingredientsSet = [...new Set(arrthree)]
+  ingredientsSet.forEach(ingredient => {
+    dropdownIngredients.innerHTML += `<li><a class="dropdown-item" href="#">${ingredient}</a></li>`;
+  })
+
+
+  let ustensilsSet = [...new Set(arr)]
+  ustensilsSet.forEach(ustensil => {
+    dropdownUstenciles.innerHTML += `<li><a class="dropdown-item" href="#">${ustensil}</a></li>`;
+  })
+
+
+  let applianceSet = [...new Set(arrtwo)]
+  applianceSet.forEach(appliance => {
+    dropdownAppareil.innerHTML += `<li><a class="dropdown-item" href="#">${appliance}</a></li>`;
+  })
+
+}

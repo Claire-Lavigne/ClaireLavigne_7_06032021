@@ -28,15 +28,13 @@ header {
   color: white !important;
 }
 
-
-
 @media (min-width: 1200px) {
   .container {
     max-width: 1250px !important;
   }
-header.container {
-  max-width: 1215px !important;
-}
+  header.container {
+    max-width: 1215px !important;
+  }
 }
 
 .card {
@@ -83,9 +81,8 @@ header.container {
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-line-clamp: 8;
-  -webkit-box-orient: vertical; 
+  -webkit-box-orient: vertical;
 }
-
 
 .second-search {
   border: none;
@@ -95,5 +92,11 @@ header.container {
   }
   &:focus {
     outline: none;
+  }
+}
+
+.dropdown-menu.show {
+  a {
+    color: white;
   }
 }
