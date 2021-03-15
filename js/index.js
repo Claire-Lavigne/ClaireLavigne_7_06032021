@@ -42,30 +42,34 @@ fetchRecipes().then(recipes => {
   const inputSearch = document.querySelector('input[type="search"]')
   const submitSearch = document.querySelector('form button');
   inputSearch.addEventListener('keyup', e => {
-    const inputValue = inputSearch.value.trim().toLowerCase();
+    const inputValue = inputSearch.value.toLowerCase();
+    const cards = document.querySelectorAll('div.card');
+
     if (inputValue.length >= 3) {
       console.log(inputValue)
-      const cardsTitle = document.querySelectorAll('div.card .card-title');
-      const cardsIngredients = document.querySelectorAll('div.card li');
-      const cardsDescription = document.querySelectorAll('div.card .card-description');
 
-
-      //  if title contains inputvalue
-      // search in title/ingredients/description
-      // filter recettes
-      // btns keywords are actualized (advanced research)
-      /*
-      // Loop through all list items, and hide those who don't match the search query
-      for (i = 0; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          li[i].style.display = "";
+      cards.forEach(card => {
+        const cardTitle = card.querySelector('div.card .card-title');
+        const cardIngredients = card.querySelector('div.card li');
+        const cardDescription = card.querySelector('div.card .card-description');
+        console.log(cardTitle)
+        // filter cards : search in title/ingredients/description 
+        // if element not in array
+        if (cardTitle.innerText.toLowerCase().indexOf(inputValue) > -1
+          || cardIngredients.innerText.toLowerCase().indexOf(inputValue) > -1
+          || cardDescription.innerText.toLowerCase().indexOf(inputValue) > -1
+        ) {
+          card.style.display = "";
         } else {
-          li[i].style.display = "none";
+          card.style.display = "none";
         }
-      }
-      */
+      })
+      // btns keywords are actualized (advanced research)
+
+    } else {
+      cards.forEach(card => {
+        card.style.display = "";
+      })
     }
 
     if (e.keyCode === 13) { // "Enter"
@@ -81,7 +85,7 @@ fetchRecipes().then(recipes => {
   const preventSearchSubmit = () => {
     submitSearch.addEventListener('click', e => {
       e.preventDefault();
-      const inputValue = inputSearch.value.trim().toLowerCase();
+      const inputValue = inputSearch.value.toLowerCase();
       console.log(inputValue)
     });
   }
