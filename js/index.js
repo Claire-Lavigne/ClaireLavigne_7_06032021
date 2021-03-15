@@ -10,91 +10,22 @@ async function fetchRecipes() {
 fetchRecipes().then(recipes => {
   filterRecipes = [...recipes];
   displayRecipes(filterRecipes)
+  mainSearch(filterRecipes)
+  dropdownOnClick()
+  removeTagsOnClick()
+  createTag()
+});
 
-  const inputSearch = document.querySelector('input[type="search"]')
-  const submitSearch = document.querySelector('form button');
-
-  inputSearch.addEventListener('keyup', e => {
-    const inputValue = inputSearch.value.toLowerCase();
-    const cards = document.querySelectorAll('div.card');
-
-    if (inputValue.length >= 3) {
-      filterRecipes = [];
-      console.log(inputValue)
-      recipes.forEach(recipe => {
-
-        let ingredientString = '';
-        recipe.ingredients.forEach(ingredient => {
-          ingredientString += ingredient.ingredient + ' ';
-        })
-        
-        let ustensilsString = '';
-        recipe.ustensils.forEach(ustensil => {
-          ustensilsString += ustensil + ' ';
-        })
-
-        if (recipe.name.toLowerCase().indexOf(inputValue) > -1
-          || recipe.description.toLowerCase().indexOf(inputValue) > -1
-          || recipe.appliance.toLowerCase().indexOf(inputValue) > -1
-          || ingredientString.toLowerCase().indexOf(inputValue) > -1
-          || ustensilsString.toLowerCase().indexOf(inputValue) > -1
-        ) {
-          filterRecipes.push(recipe);
-        }
-      })
-      displayRecipes(filterRecipes)
-
-      /*
-            cards.forEach(card => {
-              const cardTitle = card.querySelector('div.card .card-title');
-              const cardIngredients = card.querySelector('div.card li');
-              const cardDescription = card.querySelector('div.card .card-description');
-              console.log(cardTitle)
-              // filter cards : search in title/ingredients/description
-              if (cardTitle.innerText.toLowerCase().indexOf(inputValue) > -1
-                || cardIngredients.innerText.toLowerCase().indexOf(inputValue) > -1
-                || cardDescription.innerText.toLowerCase().indexOf(inputValue) > -1
-              ) {
-                card.classList.replace('d-none', 'd-flex');
-              } else {
-                card.classList.replace('d-flex', 'd-none');
-              }
-            })
-      */
-      if (document.querySelectorAll('.card.d-flex').length === 0) {
-        document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
-      } else {
-        document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
-      }
-
-      // btns keywords are actualized (advanced research)
-
-    } else {
-      cards.forEach(card => {
-        card.style.display = "";
-      })
-    }
-
-    if (e.keyCode === 13) { // "Enter"
-      preventSearchSubmit;
-    }
-
-
+const removeTagsOnClick = () => {
+  const closeTags = document.querySelectorAll('.tags span i');
+  closeTags.forEach(tag => {
+    tag.addEventListener('click', (e) => {
+      e.target.parentElement.remove();
+    })
   })
+}
 
-  // Search keywords in btns
-  // keywords shown as tag after being choosed
-
-  const preventSearchSubmit = () => {
-    submitSearch.addEventListener('click', e => {
-      e.preventDefault();
-      const inputValue = inputSearch.value.toLowerCase();
-      console.log(inputValue)
-    });
-  }
-  preventSearchSubmit()
-
-
+const dropdownOnClick = () => {
   const dropdownElements = document.querySelectorAll('.btn-group')
   dropdownElements.forEach(dropdown => {
     dropdown.addEventListener('show.bs.dropdown', (e) => {
@@ -106,21 +37,91 @@ fetchRecipes().then(recipes => {
       e.target.children[1].classList.replace('d-flex', 'd-none');
     })
   })
+}
 
-  // remove tags on Close
-  const closeTags = document.querySelectorAll('.tags span i');
-  closeTags.forEach(tag => {
-    tag.addEventListener('click', (e) => {
-      e.target.parentElement.remove();
+const createTag = () => {
+  const dropdownList = document.querySelectorAll('.dropdown-menu li');
+  const tagsContainer = document.querySelector('.tags');
+  dropdownList.forEach(elt => {
+    elt.addEventListener('click', (e) => {
+      e.preventDefault();
+      let tag = `<span class="btn btn-primary mr-3 px-3 py-1">${e.target.innerText}<i class="bi bi-x-circle ml-2" role="img"
+      aria-label="Close tag"></i></span>`;
+      tagsContainer.innerHTML += tag;
     })
   })
-});
+}
 
+const mainSearch = (recipes) => {
+
+  const inputSearch = document.querySelector('input[type="search"]')
+  inputSearch.addEventListener('keyup', e => {
+    const inputValue = inputSearch.value.toLowerCase();
+    const cards = document.querySelectorAll('div.card');
+
+    if (inputValue.length >= 3) {
+      filterRecipes = [];
+      recipes.forEach(recipe => {
+
+        let ingredientsString = '';
+        recipe.ingredients.forEach(item => {
+          ingredientsString += item.ingredient + ' ';
+        })
+
+        let ustensilsString = '';
+        recipe.ustensils.forEach(ustensil => {
+          ustensilsString += ustensil + ' ';
+        })
+
+        if (recipe.name.toLowerCase().indexOf(inputValue) > -1
+          || recipe.description.toLowerCase().indexOf(inputValue) > -1
+          || recipe.appliance.toLowerCase().indexOf(inputValue) > -1
+          || ingredientsString.toLowerCase().indexOf(inputValue) > -1
+          || ustensilsString.toLowerCase().indexOf(inputValue) > -1
+        ) {
+          filterRecipes.push(recipe);
+        }
+      })
+      displayRecipes(filterRecipes)
+
+      if (document.querySelectorAll('.card.d-flex').length === 0) {
+        document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
+      } else {
+        document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
+      }
+
+      // btns keywords are actualized (advanced research)
+
+    }
+
+
+
+    if (e.keyCode === 13) { // "Enter"
+      preventSearchSubmit;
+    }
+
+
+  })
+
+  // Search keywords in btns
+  // keywords shown as tag after being choosed
+
+  preventSearchSubmit()
+}
+
+const preventSearchSubmit = () => {
+  const submitSearch = document.querySelector('form button');
+  submitSearch.addEventListener('click', e => {
+    e.preventDefault();
+    const inputValue = inputSearch.value.toLowerCase();
+    console.log(inputValue)
+  });
+}
 
 function displayRecipes(recipes) {
-  let arr = [];
-  let arrtwo = [];
-  let arrthree = [];
+  let ustensilsArray = [];
+  let applianceArray = [];
+  let ingredientsArray = [];
   const templateElt = document.querySelector('#card_template');
   const container = document.querySelector('main .row');
   container.innerText = '';
@@ -144,46 +145,46 @@ function displayRecipes(recipes) {
     descriptionElt.innerHTML = keys.description;
     container.append(cardClone);
 
-    [keys.ingredients].forEach(array => {
+    [keys.ingredients].forEach(ingredient => {
       let name, quantity, unit;
       ul = document.createElement("ul");
 
-      array.forEach(object => {
-        (object.ingredient != undefined) ? name = object.ingredient : name = '';
-        (object.quantity != undefined) ? quantity = `: ${object.quantity}` : quantity = '';
-        (object.unit != undefined) ? unit = object.unit : unit = '';
+      ingredient.forEach(one => {
+        (one.ingredient != undefined) ? name = one.ingredient : name = '';
+        (one.quantity != undefined) ? quantity = `: ${one.quantity}` : quantity = '';
+        (one.unit != undefined) ? unit = one.unit : unit = '';
         ul.innerHTML += `<li><span>${name}</span>${quantity}${unit}</li>`;
 
 
-        arrthree.push(name)
+        ingredientsArray.push(name)
       })
 
     })
     // add list to card
     listElt.append(ul)
 
-    arrtwo.push(keys.appliance)
+    applianceArray.push(keys.appliance)
 
-    keys.ustensils.forEach(array => {
-      arr.push(array)
+    keys.ustensils.forEach(ustensil => {
+      ustensilsArray.push(ustensil)
     })
 
 
   })
 
-  let ingredientsSet = [...new Set(arrthree)]
+  let ingredientsSet = [...new Set(ingredientsArray)]
   ingredientsSet.forEach(ingredient => {
     dropdownIngredients.innerHTML += `<li><a class="dropdown-item" href="#">${ingredient}</a></li>`;
   })
 
 
-  let ustensilsSet = [...new Set(arr)]
+  let ustensilsSet = [...new Set(ustensilsArray)]
   ustensilsSet.forEach(ustensil => {
     dropdownUstenciles.innerHTML += `<li><a class="dropdown-item" href="#">${ustensil}</a></li>`;
   })
 
 
-  let applianceSet = [...new Set(arrtwo)]
+  let applianceSet = [...new Set(applianceArray)]
   applianceSet.forEach(appliance => {
     dropdownAppareil.innerHTML += `<li><a class="dropdown-item" href="#">${appliance}</a></li>`;
   })
