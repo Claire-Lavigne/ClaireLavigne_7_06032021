@@ -16,6 +16,9 @@ fetchRecipes().then(recipes => {
     const timeElt = cardClone.querySelector('.card-time');
     const listElt = cardClone.querySelector('.card-list');
     const descriptionElt = cardClone.querySelector('.card-description');
+    const dropdownIngredients = document.querySelector('.dropdown-menu[aria-labelledby="dropdownIngredients"]');
+    const dropdownAppareil = document.querySelector('.dropdown-menu[aria-labelledby="dropdownAppareil"]');
+    const dropdownUstenciles = document.querySelector('.dropdown-menu[aria-labelledby="dropdownUstensiles"]');
     let ul;
 
     titleElt.innerHTML = keys.name;
@@ -37,10 +40,16 @@ fetchRecipes().then(recipes => {
       })
     })
     listElt.append(ul)
+   
+    
+    dropdownIngredients.innerHTML += `<li><a class="dropdown-item" href="#">${keys.ingredients}</a></li>`;
+    dropdownAppareil.innerHTML += `<li><a class="dropdown-item" href="#">${keys.appliance}</a></li>`;
+    dropdownUstenciles.innerHTML += `<li><a class="dropdown-item" href="#">${keys.ustensils}</a></li>`;
   })
 
   const inputSearch = document.querySelector('input[type="search"]')
   const submitSearch = document.querySelector('form button');
+
   inputSearch.addEventListener('keyup', e => {
     const inputValue = inputSearch.value.toLowerCase();
     const cards = document.querySelectorAll('div.card');
@@ -53,17 +62,23 @@ fetchRecipes().then(recipes => {
         const cardIngredients = card.querySelector('div.card li');
         const cardDescription = card.querySelector('div.card .card-description');
         console.log(cardTitle)
-        // filter cards : search in title/ingredients/description 
-        // if element not in array
+        // filter cards : search in title/ingredients/description
         if (cardTitle.innerText.toLowerCase().indexOf(inputValue) > -1
           || cardIngredients.innerText.toLowerCase().indexOf(inputValue) > -1
           || cardDescription.innerText.toLowerCase().indexOf(inputValue) > -1
         ) {
-          card.style.display = "";
+          card.classList.replace('d-none', 'd-flex');
         } else {
-          card.style.display = "none";
+          card.classList.replace('d-flex', 'd-none');
         }
       })
+
+      if (document.querySelectorAll('.card.d-flex').length === 0) {
+        document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
+      } else {
+        document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
+      }
+
       // btns keywords are actualized (advanced research)
 
     } else {
@@ -91,14 +106,16 @@ fetchRecipes().then(recipes => {
   }
   preventSearchSubmit()
 
-  // change dropdown icon on Open
+
   const dropdownElements = document.querySelectorAll('.btn-group')
   dropdownElements.forEach(dropdown => {
     dropdown.addEventListener('show.bs.dropdown', (e) => {
-      e.target.children[0].classList.replace('bi-chevron-down', 'bi-chevron-up');
+      e.target.children[0].classList.replace('d-flex', 'd-none');
+      e.target.children[1].classList.replace('d-none', 'd-flex');
     })
     dropdown.addEventListener('hide.bs.dropdown', (e) => {
-      e.target.children[0].classList.replace('bi-chevron-up', 'bi-chevron-down');
+      e.target.children[0].classList.replace('d-none', 'd-flex');
+      e.target.children[1].classList.replace('d-flex', 'd-none');
     })
   })
 
