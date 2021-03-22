@@ -64,12 +64,10 @@ header {
   font-size: 12px;
   width: 160px;
   float: left;
-  ul {
-    padding: 0;
-    list-style: none;
-    span {
-      font-weight: bold;
-    }
+  padding: 0;
+  list-style: none;
+  span {
+    font-weight: bold;
   }
 }
 .card-description {
@@ -96,10 +94,19 @@ header {
 }
 
 .dropdown-menu.show {
+  display: flex;
+  // flex-flow: row wrap;
   li {
     text-transform: capitalize;
+    width: 200px;
+    @media (min-width: 768px) {
+      width: 600px;
+    }
   }
   a {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     color: white;
   }
   li:hover a {
