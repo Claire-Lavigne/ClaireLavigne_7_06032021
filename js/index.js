@@ -1,4 +1,5 @@
 let filterRecipes = [];
+let allRecipes = [];
 
 async function fetchRecipes() {
   const response = await fetch('./js/recipes.json');
@@ -7,13 +8,15 @@ async function fetchRecipes() {
 }
 
 fetchRecipes().then(recipes => {
+  allRecipes = [...recipes];
   filterRecipes = [...recipes];
-  displayRecipes(filterRecipes)
+  displayRecipes(allRecipes)
+  mainSearch(allRecipes)
   dropdownOnClick()
 });
 
 
-const dropdownOnClick = (recipes) => {
+const dropdownOnClick = () => {
   const dropdownElements = document.querySelectorAll('.btn-group')
   dropdownElements.forEach(dropdown => {
     dropdown.addEventListener('show.bs.dropdown', (e) => {
@@ -23,7 +26,7 @@ const dropdownOnClick = (recipes) => {
       inputSearch.focus();
       inputSearch.select();
 
-      inputSearch.addEventListener('keyup', (e) => {
+      inputSearch.addEventListener('keyup', () => {
 
         const inputValue = inputSearch.value.toLowerCase();
         const liElts = document.querySelectorAll('.dropdown-menu.show li');
@@ -76,8 +79,18 @@ const mainSearch = (recipes) => {
           filterRecipes.push(recipe);
         }
       })
+
       displayRecipes(filterRecipes)
-      displayErrorMsg()
+
+      // if filterRecipes is empty, show error msg
+      if (filterRecipes.length === 0) {
+        document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
+      } else {
+        document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
+      }
+
+    } else {
+      displayRecipes(allRecipes)
     }
 
     if (e.keyCode === 13) { // "Enter"
@@ -94,27 +107,24 @@ const preventSearchSubmit = () => {
   });
 }
 
-const displayErrorMsg = () => {
-  if (document.querySelectorAll('.card.d-flex').length === 0) {
-    document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
-  } else {
-    document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
-  }
-}
-
 const tagsSearch = (recipes) => {
 
   const tagsContainer = document.querySelector('.tags');
+  const tagsList = document.querySelectorAll('.tags span');
+  let tagValueOther
   const dropdownList = document.querySelectorAll('.dropdown-menu li');
   dropdownList.forEach(elt => {
     elt.addEventListener('click', (e) => {
       e.preventDefault();
       let tagValue = e.target.innerHTML;
-      console.log(tagValue)
       let tag = `<span class="btn btn-primary mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
         aria-label="Close tag"></i></span>`;
       tagsContainer.innerHTML += tag;
-
+      tagsList.forEach(tag => {
+        tagValueOther = tag.innerText;
+        return tagValueOther
+      })
+      console.log(tagValueOther)
       filterRecipes = [];
       recipes.forEach(recipe => {
 
@@ -134,23 +144,22 @@ const tagsSearch = (recipes) => {
           filterRecipes.push(recipe);
         }
 
+        //  removeTagsOnClick()
+        const closeIcon = document.querySelectorAll('.tags i');
+        closeIcon.forEach(icon => {
+          icon.addEventListener('click', (e) => {
+            e.target.parentElement.remove();
+            if (ingredientsString.toLowerCase().indexOf(tagValueOther) > -1) {
+              filterRecipes.push(recipe);
+            }
+          })
+        })
       })
       displayRecipes(filterRecipes);
-      removeTagsOnClick()
-      displayRecipes(filterRecipes);
+
     })
   })
 };
-
-
-const removeTagsOnClick = () => {
-  const closeIcon = document.querySelectorAll('.tags i');
-  closeIcon.forEach(icon => {
-    icon.addEventListener('click', (e) => {
-      e.target.parentElement.remove();
-    })
-  })
-}
 
 const displayRecipes = (recipes) => {
   let ustensilsArray = [];
@@ -217,7 +226,6 @@ const displayRecipes = (recipes) => {
   })
 
 
-  mainSearch(filterRecipes)
   tagsSearch(filterRecipes)
 
 }
