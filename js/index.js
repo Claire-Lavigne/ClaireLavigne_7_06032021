@@ -13,17 +13,36 @@ fetchRecipes().then(recipes => {
 });
 
 
-const dropdownOnClick = () => {
+const dropdownOnClick = (recipes) => {
   const dropdownElements = document.querySelectorAll('.btn-group')
   dropdownElements.forEach(dropdown => {
     dropdown.addEventListener('show.bs.dropdown', (e) => {
       e.target.children[0].classList.replace('d-flex', 'd-none');
       e.target.children[1].classList.replace('d-none', 'd-flex');
+      const inputSearch = e.target.children[1].children[0];
+      inputSearch.focus();
+      inputSearch.select();
+
+      inputSearch.addEventListener('keyup', (e) => {
+
+        const inputValue = inputSearch.value.toLowerCase();
+        const liElts = document.querySelectorAll('.dropdown-menu.show li');
+
+        liElts.forEach(item => {
+          if (item.innerText.toLowerCase().indexOf(inputValue) > -1) {
+            item.style.display = "";
+          } else {
+            item.style.display = "none";
+          }
+        })
+      })
+
     })
     dropdown.addEventListener('hide.bs.dropdown', (e) => {
       e.target.children[0].classList.replace('d-none', 'd-flex');
       e.target.children[1].classList.replace('d-flex', 'd-none');
     })
+
   })
 }
 
@@ -174,7 +193,6 @@ const displayRecipes = (recipes) => {
 
     })
     // add list to card
-
     applianceArray.push(recipe.appliance)
 
     recipe.ustensils.forEach(ustensil => {
