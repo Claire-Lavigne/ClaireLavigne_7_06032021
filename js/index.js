@@ -1,6 +1,7 @@
 let allRecipes = [];
 let filterRecipes = [];
 let filterRecipesTags = [];
+let filterAllRecipes = [];
 
 async function fetchRecipes() {
   const response = await fetch('./js/recipes.json');
@@ -11,13 +12,14 @@ async function fetchRecipes() {
 fetchRecipes().then(recipes => {
   allRecipes = [...recipes];
   filterRecipes = [...recipes];
+  filterRecipesTags = [];
   displayRecipes(allRecipes)
   mainSearch(allRecipes)
-  dropdownOnClick()
+  workingDropdown()
 });
 
 
-const dropdownOnClick = () => {
+const workingDropdown = () => {
   const dropdownElements = document.querySelectorAll('.btn-group')
   dropdownElements.forEach(dropdown => {
     dropdown.addEventListener('show.bs.dropdown', (e) => {
@@ -50,11 +52,10 @@ const dropdownOnClick = () => {
   })
 }
 
-
 const mainSearch = (recipes) => {
 
   const inputSearch = document.querySelector('input.main-form')
-  inputSearch.addEventListener('keyup', e => {
+  inputSearch.addEventListener('keyup', () => {
     const inputValue = inputSearch.value.toLowerCase();
 
     if (inputValue.length >= 3) {
@@ -83,15 +84,19 @@ const mainSearch = (recipes) => {
 
       displayRecipes(filterRecipes)
 
-      // if filterRecipes is empty, show error msg
+      // if filterRecipes is empty (no recipes), show error msg on page + dropdowns
       if (filterRecipes.length === 0) {
         document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
+        const dropdowns = document.querySelectorAll('.dropdown-menu');
+        if (dropdowns.children === undefined) {
+          dropdowns.forEach(dropdown => {
+            dropdown.innerHTML = ' Aucune recherche possible ';
+          })
+        }
       } else {
         document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
       }
 
-    } else {
-      displayRecipes(allRecipes)
     }
 
   })
@@ -101,6 +106,7 @@ const mainSearch = (recipes) => {
 const tagsSearch = (recipes) => {
 
   const tagsContainer = document.querySelector('.tags');
+  const tags = document.querySelectorAll('.tags span');
   const dropdowns = document.querySelectorAll('.dropdown-menu li');
   const dropdownIngredients = document.querySelectorAll('.dropdown-menu[aria-labelledby="dropdownIngredients"] li');
   const dropdownAppliance = document.querySelectorAll('.dropdown-menu[aria-labelledby="dropdownAppareil"] li');
@@ -119,7 +125,6 @@ const tagsSearch = (recipes) => {
     })
   })
 
-
   // create green tag
   dropdownAppliance.forEach(li => {
     li.addEventListener('click', (e) => {
@@ -129,7 +134,6 @@ const tagsSearch = (recipes) => {
       tagsContainer.innerHTML += tag;
     })
   })
-
 
   // create red tag
   dropdownUstencils.forEach(li => {
@@ -141,56 +145,74 @@ const tagsSearch = (recipes) => {
     })
   })
 
+  const filterTags = () => {
+
+    // get all tags and push into different arrays
+    const tagsBlue = document.querySelectorAll('.tags .btn-primary i');
+    const tagsGreen = document.querySelectorAll('.tags .btn-success i');
+    const tagsRed = document.querySelectorAll('.tags .btn-danger i');
+    tagsBlue.forEach(tag => {
+      tagsBlueArray.push(tag.parentElement.innerText);
+    })
+    tagsGreen.forEach(tag => {
+      tagsGreenArray.push(tag.parentElement.innerText);
+    })
+    tagsRed.forEach(tag => {
+      tagsRedArray.push(tag.parentElement.innerText);
+    })
+
+    filterRecipesTags = []
+
+    recipes.forEach(recipe => {
+
+      let ustensilsArray = [];
+      recipe.ustensils.forEach(ustensil => {
+        ustensilsArray.push(ustensil);
+      })
+
+      let ingredientsArray = [];
+      recipe.ingredients.forEach(item => {
+        ingredientsArray.push(item.ingredient);
+      })
+
+      let applianceArray = [];
+      applianceArray.push(recipe.appliance);
+
+      // check if tagsArrays has same elements as in recipesArrays
+      if (tagsBlueArray.every(elt => ingredientsArray.includes(elt))
+        && tagsGreenArray.every(elt => applianceArray.includes(elt))
+        && tagsRedArray.every(elt => ustensilsArray.includes(elt))) {
+        filterRecipesTags.push(recipe);
+      }
+
+    })
+
+    displayRecipes(filterRecipesTags);
+
+    // if filterRecipesTags is empty, show error msg
+    if (filterRecipesTags.length === 0) {
+      document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
+    } else {
+      document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
+    }
+  }
+
   dropdowns.forEach(li => {
     li.addEventListener('click', () => {
+      filterTags()
+    })
+  })
 
-      // get all tags and push into different arrays
-      const tagsBlue = document.querySelectorAll('.tags .btn-primary i');
-      const tagsGreen = document.querySelectorAll('.tags .btn-success i');
-      const tagsRed = document.querySelectorAll('.tags .btn-danger i');
-      tagsBlue.forEach(tag => {
-        tagsBlueArray.push(tag.parentElement.innerText);
-      })
-      tagsGreen.forEach(tag => {
-        tagsGreenArray.push(tag.parentElement.innerText);
-      })
-      tagsRed.forEach(tag => {
-        tagsRedArray.push(tag.parentElement.innerText);
-      })
-
-
-      filterRecipesTags = []
-      recipes.forEach(recipe => {
-
-        let ustensilsArray = [];
-        recipe.ustensils.forEach(ustensil => {
-          ustensilsArray.push(ustensil);
-        })
-
-        let ingredientsArray = [];
-        recipe.ingredients.forEach(item => {
-          ingredientsArray.push(item.ingredient);
-        })
-
-        let applianceArray = [];
-        applianceArray.push(recipe.appliance);
-
-        // check if tagsArrays has same elements as in recipesArrays
-        if (tagsBlueArray.every(elt => ingredientsArray.includes(elt))
-          && tagsGreenArray.every(elt => applianceArray.includes(elt))
-          && tagsRedArray.every(elt => ustensilsArray.includes(elt))) {
-          filterRecipesTags.push(recipe);
-        }
-
-      })
-
-      displayRecipes(filterRecipesTags);
-
-      // if filterRecipesTags is empty, show error msg
-      if (filterRecipesTags.length === 0) {
-        document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
+  // remove Tag on Click and filter recipes displayed
+  tags.forEach(tag => {
+    tag.addEventListener('click', (e) => {
+      e.target.parentElement.remove();
+      if (tagsContainer.childElementCount === 0) {
+        // if no tags, filter with main search
+        displayRecipes(filterRecipes)
       } else {
-        document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
+        // if tags, filter using tag search
+        filterTags()
       }
     })
   })
@@ -265,18 +287,4 @@ const displayRecipes = (recipes) => {
 
   tagsSearch(filterRecipes)
 
-
-  const tagsContainer = document.querySelector('.tags');
-  const tags = document.querySelectorAll('.tags span');
-  tags.forEach(tag => {
-    // remove Tag on Click
-    tag.addEventListener('click', (e) => {
-      e.target.parentElement.remove();
-      if (tagsContainer.childElementCount === 0) {
-        displayRecipes(filterRecipes)
-      } else {
-        tagsSearch(filterRecipes)
-      }
-    })
-  })
 }

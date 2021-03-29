@@ -95,6 +95,7 @@ header {
 
 .dropdown-menu.show {
   display: flex;
+  padding: 0.5em;
   // flex-flow: row wrap;
   li {
     text-transform: capitalize;
