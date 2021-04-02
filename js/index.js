@@ -11,7 +11,7 @@ fetchRecipes().then(recipes => {
   allRecipes = [...recipes];
   filterRecipes = [...recipes];
   displayRecipes(allRecipes)
-  mainSearch(filterRecipes)
+  mainSearch(allRecipes)
   workingDropdown()
 });
 
@@ -57,23 +57,30 @@ const mainSearch = (recipes) => {
   inputSearch.addEventListener('keyup', (e) => {
     const inputValue = inputSearch.value.toLowerCase();
 
-    if (inputValue.length >= 3) {
+    // display all recipes (if input value length < 3 and no tags)
+    displayRecipes(allRecipes)
 
+    // if input value length >= 3
+    if (inputValue.length >= 3) {
+      // filter with main search
       filterMainSearch(recipes);
 
+      // if tags, filter by main + tags
       if (tagsContainer.childElementCount > 0) {
         filterTags(filterRecipes);
       }
 
+      // actualize results
       if (e.key === "Backspace" && tagsContainer.childElementCount > 0) {
         filterTags(filterRecipes);
       }
+    }
 
-    } else {
-      if (e.key === "Backspace" && tagsContainer.childElementCount > 0) {
-        filterRecipes = [...allRecipes];
-        filterTags(filterRecipes);
-      }
+    // if input value length < 3 and tags
+    if (e.key === "Backspace" && tagsContainer.childElementCount > 0) {
+      // filter by tags
+      filterRecipes = [...allRecipes];
+      filterTags(filterRecipes);
     }
 
   })
@@ -85,38 +92,28 @@ const filterMainSearch = (recipes) => {
   const inputSearch = document.querySelector('input.main-form');
   const inputValue = inputSearch.value.toLowerCase();
 
-  filterRecipes = [];
-  recipes.forEach(recipe => {
-
-    let ingredientsArray = '';
-    recipe.ingredients.forEach(item => {
-      ingredientsArray += item.ingredient + ' ';
-    })
-
-    let ustensilsString = '';
-    recipe.ustensils.forEach(ustensil => {
-      ustensilsString += ustensil + ' ';
-    })
-
-    if (recipe.name.toLowerCase().indexOf(inputValue) > -1
-      || recipe.description.toLowerCase().indexOf(inputValue) > -1
-      || recipe.appliance.toLowerCase().indexOf(inputValue) > -1
-      || ingredientsArray.toLowerCase().indexOf(inputValue) > -1
-      || ustensilsString.toLowerCase().indexOf(inputValue) > -1
-    ) {
-      filterRecipes.push(recipe);
-    }
+  filterRecipes = recipes.filter(recipe => {
+    return (
+      recipe.name.toLowerCase().includes(inputValue) ||
+      recipe.description.toLowerCase().includes(inputValue) ||
+      recipe.appliance.toLowerCase().includes(inputValue) ||
+      recipe.ingredients.toString().toLowerCase().includes(inputValue) ||
+      recipe.ustensils.toString().toLowerCase().includes(inputValue)
+    )
   })
 
   displayRecipes(filterRecipes)
+  displayErrorMessage(filterRecipes)
 
-  // if filterRecipes is empty (no recipes), show error msg on page + dropdowns
+}
+
+const displayErrorMessage = (filterRecipes) => {
+  // if filterRecipes is empty (no recipes), show error msg
   if (filterRecipes.length === 0) {
     document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
   } else {
     document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
   }
-
 }
 
 const tagsSearch = (recipes) => {
@@ -166,9 +163,45 @@ const tagsSearch = (recipes) => {
     })
   })
 
-
-
 };
+
+const filterTags = (recipes) => {
+
+  let tagsBlueArray = [], tagsGreenArray = [], tagsRedArray = [];
+  // get all tags and push into different arrays
+  const tagsBlue = document.querySelectorAll('.tags .btn-primary i');
+  const tagsGreen = document.querySelectorAll('.tags .btn-success i');
+  const tagsRed = document.querySelectorAll('.tags .btn-danger i');
+  tagsBlue.forEach(tag => {
+    tagsBlueArray.push(tag.parentElement.innerText);
+  })
+  tagsGreen.forEach(tag => {
+    tagsGreenArray.push(tag.parentElement.innerText);
+  })
+  tagsRed.forEach(tag => {
+    tagsRedArray.push(tag.parentElement.innerText);
+  })
+
+  filterRecipes = recipes.filter(recipe => {
+    let ustensils = recipe.ustensils.map(ustensil => {
+      return ustensil;
+    })
+
+    let ingredients = recipe.ingredients.map(ingredient => {
+      return ingredient.ingredient;
+    })
+
+    // check if ingredients/appliance/ustensils includes all tags
+    return (
+      tagsBlueArray.every(elt => ingredients.includes(elt)) &&
+      tagsGreenArray.every(elt => [recipe.appliance].includes(elt)) &&
+      tagsRedArray.every(elt => ustensils.includes(elt))
+    )
+  })
+
+  displayRecipes(filterRecipes);
+  removeTags()
+}
 
 const removeTags = () => {
   const tags = document.querySelectorAll('.tags span');
@@ -189,73 +222,16 @@ const removeTags = () => {
 
 }
 
-const filterTags = (recipes) => {
-
-  let tagsBlueArray = [], tagsGreenArray = [], tagsRedArray = [];
-  // get all tags and push into different arrays
-  const tagsBlue = document.querySelectorAll('.tags .btn-primary i');
-  const tagsGreen = document.querySelectorAll('.tags .btn-success i');
-  const tagsRed = document.querySelectorAll('.tags .btn-danger i');
-  tagsBlue.forEach(tag => {
-    tagsBlueArray.push(tag.parentElement.innerText);
-  })
-  tagsGreen.forEach(tag => {
-    tagsGreenArray.push(tag.parentElement.innerText);
-  })
-  tagsRed.forEach(tag => {
-    tagsRedArray.push(tag.parentElement.innerText);
-  })
-
-  filterRecipes = []
-  recipes.forEach(recipe => {
-
-    let ustensilsArray = [];
-    recipe.ustensils.forEach(ustensil => {
-      ustensilsArray.push(ustensil);
-    })
-
-    let ingredientsArray = [];
-    recipe.ingredients.forEach(item => {
-      ingredientsArray.push(item.ingredient);
-    })
-
-    let applianceArray = [];
-    applianceArray.push(recipe.appliance);
-
-    // check if tagsArrays has same elements as in recipesArrays
-    if (tagsBlueArray.every(elt => ingredientsArray.includes(elt))
-      && tagsGreenArray.every(elt => applianceArray.includes(elt))
-      && tagsRedArray.every(elt => ustensilsArray.includes(elt))) {
-      filterRecipes.push(recipe);
-    }
-
-  })
-
-  displayRecipes(filterRecipes);
-
-  // if filterRecipesTags is empty, show error msg
-  if (filterRecipes.length === 0) {
-    document.querySelector('.no-cards').classList.replace('d-none', 'd-flex');
-  } else {
-    document.querySelector('.no-cards').classList.replace('d-flex', 'd-none');
-  }
-
-  
-  removeTags()
-}
-
 const displayRecipes = (recipes) => {
-  let ustensilsArray = [];
-  let applianceArray = [];
-  let ingredientsArray = [];
+  let ustensilsArray = [], applianceArray = [], ingredientsArray = [];
   const templateElt = document.querySelector('#card_template');
   const container = document.querySelector('main .row');
-  container.innerText = '';
   const dropdownUstenciles = document.querySelector('.dropdown-menu[aria-labelledby="dropdownUstensiles"]');
-  dropdownUstenciles.innerText = '';
   const dropdownIngredients = document.querySelector('.dropdown-menu[aria-labelledby="dropdownIngredients"]');
-  dropdownIngredients.innerText = '';
   const dropdownAppareil = document.querySelector('.dropdown-menu[aria-labelledby="dropdownAppareil"]');
+  container.innerText = '';
+  dropdownUstenciles.innerText = '';
+  dropdownIngredients.innerText = '';
   dropdownAppareil.innerText = '';
 
   recipes.forEach(recipe => {
