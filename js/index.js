@@ -97,12 +97,20 @@ const filterMainSearch = (recipes) => {
       return b.relevance - a.relevance;
     })
     .filter(recipe => {
+      let ustensils = recipe.ustensils.map(ustensil => {
+        return ustensil;
+      })
+  
+      let ingredients = recipe.ingredients.map(ingredient => {
+        return ingredient.ingredient;
+      })
+
       recipe.relevance = 0;
       recipe.name.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
       recipe.description.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
       recipe.appliance.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-      recipe.ingredients.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-      recipe.ustensils.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+      ingredients.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+      ustensils.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
 
       if (recipe.relevance > 0) {
         return recipe;
