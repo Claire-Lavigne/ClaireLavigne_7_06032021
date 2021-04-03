@@ -93,15 +93,22 @@ const filterMainSearch = (recipes) => {
   const inputValue = inputSearch.value.toLowerCase();
 
   filterRecipes = recipes.filter(recipe => {
-    return (
-      recipe.name.toLowerCase().includes(inputValue) ||
-      recipe.description.toLowerCase().includes(inputValue) ||
-      recipe.appliance.toLowerCase().includes(inputValue) ||
-      recipe.ingredients.toString().toLowerCase().includes(inputValue) ||
-      recipe.ustensils.toString().toLowerCase().includes(inputValue)
-    )
-  })
+    recipe.relevance = 0;
+    recipe.name.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+    recipe.description.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+    recipe.appliance.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+    recipe.ingredients.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+    recipe.ustensils.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
 
+    if (recipe.relevance > 0) {
+      return recipe;
+    }
+
+  }).sort((a, b) => {
+    return b.relevance - a.relevance;
+  });
+
+  console.log(filterRecipes)
   displayRecipes(filterRecipes)
   displayErrorMessage(filterRecipes)
 
