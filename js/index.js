@@ -92,21 +92,23 @@ const filterMainSearch = (recipes) => {
   const inputSearch = document.querySelector('input.main-form');
   const inputValue = inputSearch.value.toLowerCase();
 
-  filterRecipes = recipes.filter(recipe => {
-    recipe.relevance = 0;
-    recipe.name.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-    recipe.description.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-    recipe.appliance.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-    recipe.ingredients.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-    recipe.ustensils.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+  filterRecipes = recipes
+    .sort((a, b) => {
+      return b.relevance - a.relevance;
+    })
+    .filter(recipe => {
+      recipe.relevance = 0;
+      recipe.name.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+      recipe.description.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+      recipe.appliance.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+      recipe.ingredients.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
+      recipe.ustensils.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
 
-    if (recipe.relevance > 0) {
-      return recipe;
-    }
+      if (recipe.relevance > 0) {
+        return recipe;
+      }
 
-  }).sort((a, b) => {
-    return b.relevance - a.relevance;
-  });
+    });
 
   console.log(filterRecipes)
   displayRecipes(filterRecipes)
@@ -211,11 +213,10 @@ const filterTags = (recipes) => {
 }
 
 const removeTags = () => {
-  const tags = document.querySelectorAll('.tags span');
   const tagsContainer = document.querySelector('.tags');
   // When I remove a "tag", filter recipes
-  tags.forEach(tag => {
-    tag.addEventListener('click', (e) => {
+  document.addEventListener('click', e => {
+    if (e.target.classList.contains('bi-x-circle')) {
       e.target.parentElement.remove();
       // if there are tags, get all recipes and filter them by main search + tags
       filterRecipes = [...allRecipes];
@@ -224,9 +225,8 @@ const removeTags = () => {
       if (tagsContainer.childElementCount === 0) {
         filterMainSearch(filterRecipes);
       }
-    })
+    }
   })
-
 }
 
 const displayRecipes = (recipes) => {
