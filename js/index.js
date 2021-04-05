@@ -102,6 +102,7 @@ const filterMainSearch = (recipes) => {
     )
   })
 
+  console.log(filterRecipes)
   displayRecipes(filterRecipes)
   displayErrorMessage(filterRecipes)
 
@@ -133,6 +134,7 @@ const tagsSearch = (recipes) => {
       let tag = `<span class="btn btn-primary mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
       aria-label="Close tag"></i></span>`;
       tagsContainer.innerHTML += tag;
+      removeTags()
     })
   })
 
@@ -143,6 +145,7 @@ const tagsSearch = (recipes) => {
       let tag = `<span class="btn btn-success mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
       aria-label="Close tag"></i></span>`;
       tagsContainer.innerHTML += tag;
+      removeTags()
     })
   })
 
@@ -153,6 +156,7 @@ const tagsSearch = (recipes) => {
       let tag = `<span class="btn btn-danger mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
       aria-label="Close tag"></i></span>`;
       tagsContainer.innerHTML += tag;
+      removeTags()
     })
   })
 
@@ -200,7 +204,6 @@ const filterTags = (recipes) => {
   })
 
   displayRecipes(filterRecipes);
-  removeTags()
 }
 
 const removeTags = () => {
