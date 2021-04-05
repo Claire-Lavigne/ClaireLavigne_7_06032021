@@ -90,7 +90,7 @@ const mainSearch = (recipes) => {
 const filterMainSearch = (recipes) => {
 
   const inputSearch = document.querySelector('input.main-form');
-  const inputValue = inputSearch.value.toLowerCase();
+  const inputValue = inputSearch.value.toLowerCase().trim();
 
   filterRecipes = recipes.filter(recipe => {
     return (
