@@ -90,7 +90,7 @@ const mainSearch = (recipes) => {
 const filterMainSearch = (recipes) => {
 
   const inputSearch = document.querySelector('input.main-form');
-  const inputValue = inputSearch.value.toLowerCase();
+  const inputValue = inputSearch.value.toLowerCase().trim();
 
   filterRecipes = recipes
     .sort((a, b) => {
@@ -100,18 +100,21 @@ const filterMainSearch = (recipes) => {
       let ustensils = recipe.ustensils.map(ustensil => {
         return ustensil;
       })
-  
+
       let ingredients = recipe.ingredients.map(ingredient => {
         return ingredient.ingredient;
       })
 
       recipe.relevance = 0;
-      recipe.name.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-      recipe.description.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-      recipe.appliance.toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-      ingredients.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-      ustensils.toString().toLowerCase().includes(inputValue) ? recipe.relevance++ : recipe.relevance;
-
+      recipe.relevance = recipe.name.toLowerCase().includes(inputValue) ? recipe.relevance + 3 : recipe.relevance;
+      recipe.relevance = recipe.appliance.toLowerCase().includes(inputValue) ? recipe.relevance + 2 : recipe.relevance;
+      // "gi" = search in all string + case insensitive https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/RegExp
+      // matchAll https://stackoverflow.com/questions/3410464/how-to-find-indices-of-all-occurrences-of-one-string-in-another-in-javascript/58828841#58828841
+      let indexes = [...recipe.description.toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length;
+      indexes += [...ingredients.toString().toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length * 2;
+      indexes += [...ustensils.toString().toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length *2;
+      console.log(recipe.relevance)
+      recipe.relevance += indexes;
       if (recipe.relevance > 0) {
         return recipe;
       }
