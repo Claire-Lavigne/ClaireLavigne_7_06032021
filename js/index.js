@@ -113,7 +113,6 @@ const filterMainSearch = (recipes) => {
       let indexes = [...recipe.description.toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length;
       indexes += [...ingredients.toString().toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length * 2;
       indexes += [...ustensils.toString().toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length *2;
-      console.log(recipe.relevance)
       recipe.relevance += indexes;
       if (recipe.relevance > 0) {
         return recipe;
@@ -153,6 +152,7 @@ const tagsSearch = (recipes) => {
       let tag = `<span class="btn btn-primary mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
       aria-label="Close tag"></i></span>`;
       tagsContainer.innerHTML += tag;
+      removeTags()
     })
   })
 
@@ -163,6 +163,7 @@ const tagsSearch = (recipes) => {
       let tag = `<span class="btn btn-success mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
       aria-label="Close tag"></i></span>`;
       tagsContainer.innerHTML += tag;
+      removeTags()
     })
   })
 
@@ -173,6 +174,7 @@ const tagsSearch = (recipes) => {
       let tag = `<span class="btn btn-danger mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
       aria-label="Close tag"></i></span>`;
       tagsContainer.innerHTML += tag;
+      removeTags()
     })
   })
 
@@ -220,7 +222,6 @@ const filterTags = (recipes) => {
   })
 
   displayRecipes(filterRecipes);
-  removeTags()
 }
 
 const removeTags = () => {
