@@ -97,23 +97,21 @@ const filterMainSearch = (recipes) => {
       return b.relevance - a.relevance;
     })
     .filter(recipe => {
-      let ustensils = recipe.ustensils.map(ustensil => {
-        return ustensil;
-      })
-
+      // let ustensils = recipe.ustensils.map(ustensil => { return ustensil; })
+      
       let ingredients = recipe.ingredients.map(ingredient => {
         return ingredient.ingredient;
       })
 
       recipe.relevance = 0;
-      recipe.relevance = recipe.name.toLowerCase().includes(inputValue) ? recipe.relevance + 3 : recipe.relevance;
+      recipe.relevance = recipe.name.toLowerCase().includes(inputValue) ? recipe.relevance + 1 : recipe.relevance;
       // recipe.relevance = recipe.appliance.toLowerCase().includes(inputValue) ? recipe.relevance + 2 : recipe.relevance;
       /* "gi" = search in all string + case insensitive https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Global_Objects/RegExp
       ** matchAll https://stackoverflow.com/questions/3410464/how-to-find-indices-of-all-occurrences-of-one-string-in-another-in-javascript/58828841#58828841 */
-      let indexes = [...recipe.description.toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length * 0.5;
-      indexes += [...ingredients.toString().toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length * 2;
+      recipe.relevance += [...recipe.description.toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length * 0.5;
+      recipe.relevance += [...ingredients.toString().toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length * 2;
       // indexes += [...ustensils.toString().toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length *2;
-      recipe.relevance += indexes;
+      
       if (recipe.relevance > 0) {
         return recipe;
       }
