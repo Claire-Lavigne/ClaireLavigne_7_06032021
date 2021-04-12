@@ -96,9 +96,9 @@ const filterMainSearch = (recipes) => {
     return (
       recipe.name.toLowerCase().includes(inputValue) ||
       recipe.description.toLowerCase().includes(inputValue) ||
-      recipe.appliance.toLowerCase().includes(inputValue) ||
-      recipe.ingredients.toString().toLowerCase().includes(inputValue) ||
-      recipe.ustensils.toString().toLowerCase().includes(inputValue)
+     // recipe.appliance.toLowerCase().includes(inputValue) ||
+     // recipe.ustensils.toString().toLowerCase().includes(inputValue) ||
+      recipe.ingredients.toString().toLowerCase().includes(inputValue)
     )
   })
 
@@ -237,6 +237,7 @@ const displayRecipes = (recipes) => {
   dropdownIngredients.innerText = '';
   dropdownAppareil.innerText = '';
 
+  // to shuffle : recipes.sort( () => {return 0.5 - Math.random() }).forEach(recipe => {
   recipes.forEach(recipe => {
     const cardClone = document.importNode(templateElt.content, true);
     const titleElt = cardClone.querySelector('.card-title');
