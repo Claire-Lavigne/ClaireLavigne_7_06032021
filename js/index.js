@@ -89,8 +89,8 @@ const mainSearch = (recipes) => {
 
 const filterMainSearch = (recipes) => {
 
-  const inputSearch = document.querySelector('input.main-form');
-  const inputValue = inputSearch.value.toLowerCase().trim();
+  const input = document.querySelector('input.main-form');
+  const inputValue = input.value.toLowerCase().trim();
 
   filterRecipes = recipes
     .sort((a, b) => {
@@ -98,7 +98,7 @@ const filterMainSearch = (recipes) => {
     })
     .filter(recipe => {
       // let ustensils = recipe.ustensils.map(ustensil => { return ustensil; })
-      
+
       let ingredients = recipe.ingredients.map(ingredient => {
         return ingredient.ingredient;
       })
@@ -111,7 +111,7 @@ const filterMainSearch = (recipes) => {
       recipe.relevance += [...recipe.description.toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length * 0.5;
       recipe.relevance += [...ingredients.toString().toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length * 2;
       // indexes += [...ustensils.toString().toLowerCase().matchAll(new RegExp(inputValue, 'gi'))].map(a => a.index).length *2;
-      
+
       if (recipe.relevance > 0) {
         return recipe;
       }
@@ -136,54 +136,31 @@ const displayErrorMessage = (filterRecipes) => {
 const tagsSearch = (recipes) => {
 
   const tagsContainer = document.querySelector('.tags');
-  const dropdowns = document.querySelectorAll('.dropdown-menu li');
-  const dropdownIngredients = document.querySelectorAll('.dropdown-menu[aria-labelledby="dropdownIngredients"] li');
-  const dropdownAppliance = document.querySelectorAll('.dropdown-menu[aria-labelledby="dropdownAppareil"] li');
-  const dropdownUstencils = document.querySelectorAll('.dropdown-menu[aria-labelledby="dropdownUstensiles"] li');
-  let tagValue;
-
-  // When I click on "li" in specific dropdown
-  // create blue tag
-  dropdownIngredients.forEach(li => {
-    li.addEventListener('click', (e) => {
-      tagValue = e.target.innerHTML;
-      let tag = `<span class="btn btn-primary mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
-      aria-label="Close tag"></i></span>`;
-      tagsContainer.innerHTML += tag;
-      removeTags()
-    })
-  })
-
-  // create green tag
-  dropdownAppliance.forEach(li => {
-    li.addEventListener('click', (e) => {
-      tagValue = e.target.innerHTML;
-      let tag = `<span class="btn btn-success mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
-      aria-label="Close tag"></i></span>`;
-      tagsContainer.innerHTML += tag;
-      removeTags()
-    })
-  })
-
-  // create red tag
-  dropdownUstencils.forEach(li => {
-    li.addEventListener('click', (e) => {
-      tagValue = e.target.innerHTML;
-      let tag = `<span class="btn btn-danger mr-3 px-3 py-1">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
-      aria-label="Close tag"></i></span>`;
-      tagsContainer.innerHTML += tag;
-      removeTags()
-    })
-  })
-
-  // When I click on "li" in any dropdown, filter tags
-  dropdowns.forEach(li => {
-    li.addEventListener('click', () => {
-      filterTags(recipes)
-    })
-  })
+  
+  window.addTagBlue = (e) => {
+    let tagValue = e.children[0].innerHTML;
+    let tag = `<span class="btn btn-primary mr-3 px-3 py-1">${tagValue}<i onclick="removeTags(this)" class="bi bi-x-circle ml-2" role="img"
+  aria-label="Close tag"></i></span>`;
+    tagsContainer.innerHTML += tag;
+    filterTags(recipes)
+  }
+  window.addTagRed = (e) => {
+    let tagValue = e.children[0].innerHTML;
+    let tag = `<span class="btn btn-danger mr-3 px-3 py-1">${tagValue}<i onclick="removeTags(this)" class="bi bi-x-circle ml-2" role="img"
+  aria-label="Close tag"></i></span>`;
+    tagsContainer.innerHTML += tag;
+    filterTags(recipes)
+  }
+  window.addTagGreen = (e) => {
+    let tagValue = e.children[0].innerHTML;
+    let tag = `<span class="btn btn-success mr-3 px-3 py-1">${tagValue}<i onclick="removeTags(this)" class="bi bi-x-circle ml-2" role="img"
+  aria-label="Close tag"></i></span>`;
+    tagsContainer.innerHTML += tag;
+    filterTags(recipes)
+  }
 
 };
+
 
 const filterTags = (recipes) => {
 
@@ -222,21 +199,13 @@ const filterTags = (recipes) => {
   displayRecipes(filterRecipes);
 }
 
-const removeTags = () => {
-  const tagsContainer = document.querySelector('.tags');
-  // When I remove a "tag", filter recipes
-  document.addEventListener('click', e => {
-    if (e.target.classList.contains('bi-x-circle')) {
-      e.target.parentElement.remove();
-      // if there are tags, get all recipes and filter them by main search + tags
-      filterRecipes = [...allRecipes];
-      filterTags(filterRecipes);
-      // if no tags remaining, filter by main search
-      if (tagsContainer.childElementCount === 0) {
-        filterMainSearch(filterRecipes);
-      }
-    }
-  })
+
+window.removeTags = (e) => {
+  e.parentElement.remove();
+  // get all recipes and filter them by main search + tags
+  filterRecipes = [...allRecipes];
+  filterMainSearch(filterRecipes);
+  filterTags(filterRecipes);
 }
 
 const displayRecipes = (recipes) => {
@@ -288,17 +257,17 @@ const displayRecipes = (recipes) => {
 
   let ingredientsSet = [...new Set(ingredientsArray)]
   ingredientsSet.forEach(ingredient => {
-    dropdownIngredients.innerHTML += `<li class="col-12 col-md-4"><a class="dropdown-item" href="#">${ingredient}</a></li>`;
+    dropdownIngredients.innerHTML += `<li onclick="addTagBlue(this)" class="col-12 col-md-4"><a class="dropdown-item" href="#">${ingredient}</a></li>`;
   })
 
   let ustensilsSet = [...new Set(ustensilsArray)]
   ustensilsSet.forEach(ustensil => {
-    dropdownUstenciles.innerHTML += `<li class="col-12 col-md-4"><a class="dropdown-item" href="#">${ustensil}</a></li>`;
+    dropdownUstenciles.innerHTML += `<li onclick="addTagRed(this)" class="col-12 col-md-4"><a class="dropdown-item" href="#">${ustensil}</a></li>`;
   })
 
   let applianceSet = [...new Set(applianceArray)]
   applianceSet.forEach(appliance => {
-    dropdownAppareil.innerHTML += `<li class="col-12 col-md-4"><a class="dropdown-item" href="#">${appliance}</a></li>`;
+    dropdownAppareil.innerHTML += `<li onclick="addTagGreen(this)" class="col-12 col-md-4"><a class="dropdown-item" href="#">${appliance}</a></li>`;
   })
 
   tagsSearch(filterRecipes)

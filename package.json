@@ -4,22 +4,23 @@
   "description": "",
   "main": "./js/index.js",
   "scripts": {
-    "sass": "sass --watch ./scss/style.scss:./css/style.css --style compressed",
-    "prefix": "postcss ./css/style.css --use autoprefixer -d ./css/prefixed/",
+    "scss": "node-sass ./scss/style.scss -o ./build/css/style.css",
+    "prefix": "postcss ./build/css/style.css --use autoprefixer -d ./build/css/prefixed/",
     "start": "live-server",
-    "dev": "npm-run-all --parallel sass prefix start"
+    "dev": "npm-run-all scss prefix start",
+    "dev-mac": "npm run scss & npm run prefix & npm run start"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "bootstrap": "^4.6.0",
-    "bootstrap-icons": "^1.4.0",
-    "live-server": "^1.2.1",
-    "postcss": "^8.2.7",
-    "sass": "^1.32.8"
+    "bootstrap-icons": "^1.4.0"
   },
   "devDependencies": {
-    "npm-run-all": "^4.1.5"
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.2.10",
+    "live-server": "^1.2.1",
+    "node-sass": "^5.0.0"
   },
   "browserslist": "last 4 versions"
 }
