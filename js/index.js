@@ -96,8 +96,8 @@ const filterMainSearch = (recipes) => {
     return (
       recipe.name.toLowerCase().includes(inputValue) ||
       recipe.description.toLowerCase().includes(inputValue) ||
-     // recipe.appliance.toLowerCase().includes(inputValue) ||
-     // recipe.ustensils.toString().toLowerCase().includes(inputValue) ||
+      // recipe.appliance.toLowerCase().includes(inputValue) ||
+      // recipe.ustensils.toString().toLowerCase().includes(inputValue) ||
       recipe.ingredients.toString().toLowerCase().includes(inputValue)
     )
   })
@@ -207,7 +207,7 @@ const filterTags = (recipes) => {
 }
 
 const removeTags = () => {
-  const tags = document.querySelectorAll('.tags span');
+  const tags = document.querySelectorAll('.tags i');
   const tagsContainer = document.querySelector('.tags');
   // When I remove a "tag", filter recipes
   tags.forEach(tag => {
