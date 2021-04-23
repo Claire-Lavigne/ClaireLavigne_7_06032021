@@ -28,7 +28,7 @@ const workingDropdown = () => {
 
       inputSearch.addEventListener('keyup', () => {
 
-        const inputValue = inputSearch.value.toLowerCase();
+        const inputValue = inputSearch.value.toLowerCase().trim();
         const liElts = document.querySelectorAll('.dropdown-menu.show li');
 
         liElts.forEach(item => {
@@ -55,10 +55,7 @@ const mainSearch = (recipes) => {
   const tagsContainer = document.querySelector('.tags');
 
   inputSearch.addEventListener('keyup', (e) => {
-    const inputValue = inputSearch.value.toLowerCase();
-
-    // display all recipes (if input value length < 3 and no tags)
-    displayRecipes(allRecipes)
+    const inputValue = inputSearch.value.toLowerCase().trim();
 
     // if input value length >= 3
     if (inputValue.length >= 3) {
@@ -136,7 +133,7 @@ const displayErrorMessage = (filterRecipes) => {
 const tagsSearch = (recipes) => {
 
   const tagsContainer = document.querySelector('.tags');
-  
+
   window.addTagBlue = (e) => {
     let tagValue = e.children[0].innerHTML;
     let tag = `<span class="btn btn-primary mr-3 px-3 py-1">${tagValue}<i onclick="removeTags(this)" class="bi bi-x-circle ml-2" role="img"
