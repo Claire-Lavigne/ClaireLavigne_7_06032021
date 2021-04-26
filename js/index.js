@@ -57,6 +57,9 @@ const mainSearch = (recipes) => {
   inputSearch.addEventListener('keyup', (e) => {
     const inputValue = inputSearch.value.toLowerCase().trim();
 
+    // display all recipes (if input value length < 3 and no tags)
+    displayRecipes(allRecipes)
+    
     // if input value length >= 3
     if (inputValue.length >= 3) {
       // filter with main search
