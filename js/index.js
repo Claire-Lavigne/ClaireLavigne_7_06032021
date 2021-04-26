@@ -65,12 +65,13 @@ const mainSearch = (recipes) => {
       // if tags, filter by main + tags
       if (tagsContainer.childElementCount > 0) {
         filterTags(filterRecipes);
+
+        // actualize results
+        if (e.key === "Backspace") {
+          filterTags(filterRecipes);
+        }
       }
 
-      // actualize results
-      if (e.key === "Backspace" && tagsContainer.childElementCount > 0) {
-        filterTags(filterRecipes);
-      }
     }
 
     // if input value length < 3 and tags
@@ -158,7 +159,6 @@ const tagsSearch = (recipes) => {
 
 };
 
-
 const filterTags = (recipes) => {
 
   let tagsBlueArray = [], tagsGreenArray = [], tagsRedArray = [];
@@ -194,6 +194,7 @@ const filterTags = (recipes) => {
   })
 
   displayRecipes(filterRecipes);
+  displayErrorMessage(filterRecipes)
 }
 
 
