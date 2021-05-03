@@ -2,10 +2,6 @@
 @import "./../node_modules/bootstrap/scss/bootstrap.scss";
 @import "./../../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
-.dropdown-toggle::after {
-  display: none;
-}
-
 .btn-success {
   color: $white;
 }
@@ -26,6 +22,9 @@ header {
 }
 .dropdown-toggle {
   color: white !important;
+  &::after {
+    display: none;
+  }
 }
 
 @media (min-width: 1200px) {
@@ -37,9 +36,6 @@ header {
   }
 }
 
-.card {
-  max-width: 380px;
-}
 .row-cols-1 .card {
   margin-left: auto !important;
   margin-right: auto !important;
@@ -50,41 +46,46 @@ header {
     margin-right: auto !important;
   }
 }
-.card-title {
-  height: 42px;
-  width: 250px;
-  float: left;
-  font-size: 18px;
-}
-.card-time {
-  float: right;
-  font-weight: bold;
-}
-.card-list {
-  font-size: 12px;
-  width: 160px;
-  float: left;
-  padding: 0;
-  list-style: none;
-  span {
+
+.card {
+  max-width: 380px;
+  &-title {
+    height: 42px;
+    width: 250px;
+    float: left;
+    font-size: 18px;
+  }
+  &-time {
+    float: right;
     font-weight: bold;
   }
-}
-.card-description {
-  height: 145px;
-  font-size: 12px;
-  width: 160px;
-  float: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 8;
-  -webkit-box-orient: vertical;
+  &-list {
+    font-size: 12px;
+    width: 160px;
+    float: left;
+    padding: 0;
+    list-style: none;
+    span {
+      font-weight: bold;
+    }
+  }
+  &-description {
+    height: 145px;
+    font-size: 12px;
+    width: 160px;
+    float: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical;
+  }
 }
 
 .second-search {
   border: none;
   background: transparent;
+  color: white;
   &::placeholder {
     color: lightgray;
   }
@@ -95,7 +96,7 @@ header {
 
 .dropdown-menu.show {
   display: flex;
-      padding: 0.5em;
+  padding: 0.5em;
   // flex-flow: row wrap;
   li {
     text-transform: capitalize;
