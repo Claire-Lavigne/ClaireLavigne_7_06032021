@@ -7187,9 +7187,6 @@ a.text-dark:hover, a.text-dark:focus {
     color: inherit;
     border-color: #dee2e6; } }
 
-.dropdown-toggle::after {
-  display: none; }
-
 .btn-success {
   color: #fff; }
 
@@ -7205,15 +7202,14 @@ header form {
 
 .dropdown-toggle {
   color: white !important; }
+  .dropdown-toggle::after {
+    display: none; }
 
 @media (min-width: 1200px) {
   .container {
     max-width: 1250px !important; }
   header.container {
     max-width: 1215px !important; } }
-
-.card {
-  max-width: 380px; }
 
 .row-cols-1 .card {
   margin-left: auto !important;
@@ -7223,39 +7219,39 @@ header form {
   margin-left: auto !important;
   margin-right: auto !important; }
 
-.card-title {
-  height: 42px;
-  width: 250px;
-  float: left;
-  font-size: 18px; }
-
-.card-time {
-  float: right;
-  font-weight: bold; }
-
-.card-list {
-  font-size: 12px;
-  width: 160px;
-  float: left;
-  padding: 0;
-  list-style: none; }
-  .card-list span {
+.card {
+  max-width: 380px; }
+  .card-title {
+    height: 42px;
+    width: 250px;
+    float: left;
+    font-size: 18px; }
+  .card-time {
+    float: right;
     font-weight: bold; }
-
-.card-description {
-  height: 145px;
-  font-size: 12px;
-  width: 160px;
-  float: right;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 8;
-  -webkit-box-orient: vertical; }
+  .card-list {
+    font-size: 12px;
+    width: 160px;
+    float: left;
+    padding: 0;
+    list-style: none; }
+    .card-list span {
+      font-weight: bold; }
+  .card-description {
+    height: 145px;
+    font-size: 12px;
+    width: 160px;
+    float: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 8;
+    -webkit-box-orient: vertical; }
 
 .second-search {
   border: none;
-  background: transparent; }
+  background: transparent;
+  color: white; }
   .second-search::placeholder {
     color: lightgray; }
   .second-search:focus {
