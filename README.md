@@ -5,3 +5,5 @@
 # Getting Started
 - `npm i`
 - `npm run dev`
+
+- Switch to branch "algorithm2" to check the second algorithm
