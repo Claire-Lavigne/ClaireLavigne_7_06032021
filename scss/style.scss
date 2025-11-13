@@ -110,8 +110,12 @@ header {
     text-overflow: ellipsis;
     white-space: nowrap;
     color: white;
+    &:focus {
+      color: black;
+    }
   }
-  li:hover a {
+  li:hover a,
+  li:active a {
     color: black;
   }
 }
