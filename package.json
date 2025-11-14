@@ -4,23 +4,27 @@
   "description": "",
   "main": "./js/index.js",
   "scripts": {
-    "scss": "node-sass ./scss/style.scss -o ./build/css/style.css",
-    "prefix": "postcss ./build/css/style.css --use autoprefixer -d ./build/css/prefixed/",
-    "start": "live-server",
-    "dev": "npm-run-all scss prefix start",
-    "dev-mac": "npm run scss & npm run prefix & npm run start"
+    "prebuild": "node -e \"require('fs').mkdirSync('build/css/prefixed',{recursive:true})\"",
+    "build:sass": "sass scss/style.scss build/css/style.src.css --style=compressed",
+    "build:prefix": "postcss build/css/style.src.css --use autoprefixer -o build/css/prefixed/style.css",
+    "build": "npm run prebuild && npm run build:sass && npm run build:prefix",
+    "watch:sass": "sass --watch scss/style.scss:build/css/style.src.css --style=compressed",
+    "watch:prefix": "postcss build/css/style.src.css --use autoprefixer -o build/css/prefixed/style.css --watch",
+    "start": "live-server --port=8080 --host=localhost",
+    "dev": "npm run build && npm-run-all --parallel watch:sass watch:prefix start"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bootstrap": "^4.6.0",
-    "bootstrap-icons": "^1.4.0"
+    "bootstrap": "^4.6.0"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "live-server": "^1.2.2",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.2.10",
-    "live-server": "^1.2.1",
-    "node-sass": "^5.0.0"
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "sass": "^1.94.0"
   },
   "browserslist": "last 4 versions"
 }

@@ -1,6 +1,5 @@
 @import "variable_overrides";
 @import "./../node_modules/bootstrap/scss/bootstrap.scss";
-@import "./../../../node_modules/bootstrap-icons/font/bootstrap-icons.css";
 
 .btn-success {
   color: $white;
@@ -110,8 +109,12 @@ header {
     text-overflow: ellipsis;
     white-space: nowrap;
     color: white;
+    &:focus {
+      color: black;
+    }
   }
-  li:hover a {
+  li:hover a,
+  li:active a {
     color: black;
   }
 }

@@ -1,2 +1,10 @@
 node_modules
 DS_Store
+
+# Ignore everything in build/
+build/*
+
+# But NOT these paths:
+!build/css/
+!build/css/prefixed/
+!build/css/prefixed/style.css

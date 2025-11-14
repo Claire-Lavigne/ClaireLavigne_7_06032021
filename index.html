@@ -4,52 +4,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Les petits plats</title>
-  <link rel="stylesheet" href="./build/css/prefixed/style.css" />
+  <title>Les Petits Plats – Recherchez des Recettes Rapides et Gourmandes</title>
+  <meta name="description"
+    content="Les Petits Plats est une plateforme de recherche de recettes simple et rapide. 
+    Trouvez des plats par ingrédients, appareils ou ustensiles grâce à un moteur de recherche performant et accessible." />
+  <link rel="stylesheet" type="text/css" href="./build/css/prefixed/style.css" />
   <link rel="icon" type="image/png" href="./images/icon.png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
 </head>
 
 <body>
   <header class="container p-0">
     <nav class="navbar d-flex justify-content-center">
-      <a class="navbar-brand" href="#"><img src="./images/logo.svg" alt="Logo Les petits plats"></a>
+      <h1 class="sr-only">Les petits plats</h1>
+      <a class="navbar-brand" href="#"><img src="./images/logo.svg" alt="Homepage"></a>
     </nav>
 
-    <form class="d-flex">
-      <input class="main-form form-control me-2 bg-light px-3 py-4" type="text"
-        placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette" aria-label="Search">
-      <button class="btn btn-outline-success align-self-center" type="button"><i class="bi bi-search"></i></button>
+    <form class="d-flex" role="search">
+      <label for="search" class="sr-only">Rechercher une recette</label>
+      <input id="search" class="main-form form-control me-2 bg-light px-3 py-4" type="text"
+        placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette">
+      <button class="btn btn-outline-success align-self-center" type="button" aria-label="Rechercher"><i
+          class="bi bi-search" aria-hidden="true"></i></button>
     </form>
 
     <div class="tags container mt-4 p-0"></div>
 
     <div class="container mt-4 p-0">
-      <div class="btn-group mr-2 mb-4">
-        <div class="btn btn-primary dropdown-toggle p-3" role="form" id="dropdownIngredients" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          <span class="d-flex">Ingrédients <i class="bi bi-chevron-down ml-4"></i></span>
-          <span class="d-none"><input class="second-search" type="text" placeholder="Recherche un ingrédient"> <i
+      <div class="btn-group mr-2 mb-4" role="form">
+        <button aria-label="Rechercher un ingrédient" class="btn btn-primary dropdown-toggle p-3"
+          id="dropdownIngredients" data-bs-auto-close="outside" data-bs-toggle="dropdown" aria-expanded="false"
+          aria-haspopup="listbox" aria-controls="ingredients-list">
+          <span class="d-flex">Ingrédients <i aria-hidden="true" class="bi bi-chevron-down ml-4"></i></span>
+          <span class="d-none">
+            <label for="ingredient" class="sr-only">Rechercher un ingrédient</label>
+            <input id="ingredient" class="second-search" type="text" placeholder="Lait de coco..."> <i
               class="bi bi-chevron-up ml-4"></i></span>
-        </div>
-        <ul class="dropdown-menu bg-primary row" aria-labelledby="dropdownIngredients"></ul>
+        </button>
+        <ul id="ingredients-list" class="dropdown-menu bg-primary row" aria-labelledby="dropdownIngredients"></ul>
       </div>
-      <div class="btn-group mr-2 mb-4">
-        <div class="btn btn-success dropdown-toggle p-3" role="form" id="dropdownAppareil" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          <span class="d-flex">Appareil <i class="bi bi-chevron-down ml-4"></i></span>
-          <span class="d-none"><input class="second-search" type="text" placeholder="Recherche un appareil"> <i
+      <div class="btn-group mr-2 mb-4" role="form">
+        <button aria-label="Rechercher un appareil" class="btn btn-success dropdown-toggle p-3" id="dropdownAppareil"
+          data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-haspopup="listbox"
+          aria-controls="appareil-list">
+          <span class="d-flex">Appareil <i aria-hidden="true" class="bi bi-chevron-down ml-4"></i></span>
+          <span class="d-none">
+            <label for="appareil" class="sr-only">Recherche un appareil</label>
+            <input id="appareil" class="second-search" type="text" placeholder="Blender..."> <i
               class="bi bi-chevron-up ml-4"></i></span>
-        </div>
-        <ul class="dropdown-menu bg-success row" aria-labelledby="dropdownAppareil"></ul>
+        </button>
+        <ul id="appareil-list" class="dropdown-menu bg-success row" aria-labelledby="dropdownAppareil"></ul>
       </div>
-      <div class="btn-group mb-4">
-        <div class="btn btn-danger dropdown-toggle p-3" role="form" id="dropdownUstensiles" data-bs-toggle="dropdown"
-          aria-expanded="false">
-          <span class="d-flex">Ustensiles <i class="bi bi-chevron-down ml-4"></i></span>
-          <span class="d-none"><input class="second-search" type="text" placeholder="Recherche un ustensile"> <i
+      <div class="btn-group mb-4" role="form">
+        <button aria-label="Rechercher un ustensile" class="btn btn-danger dropdown-toggle p-3" id="dropdownUstensiles"
+          data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false" aria-haspopup="listbox"
+          aria-controls="ustensile-list">
+          <span class="d-flex">Ustensiles <i aria-hidden="true" class="bi bi-chevron-down ml-4"></i></span>
+          <span class="d-none">
+            <label for="ustensiles" class="sr-only">Rechercher un ustensile</label>
+            <input id="ustensiles" class="second-search" type="text" placeholder="Bol..."> <i
               class="bi bi-chevron-up ml-4"></i></span>
-        </div>
-        <ul class="dropdown-menu bg-danger row" aria-labelledby="dropdownUstensiles"></ul>
+        </button>
+        <ul id="ustensile-list" class="dropdown-menu bg-danger row" aria-labelledby="dropdownUstensiles"></ul>
       </div>
     </div>
 
@@ -58,7 +75,7 @@
 
   <template id="card_template">
     <div class="card col my-4 p-0 text-dark bg-light d-flex">
-      <img src="https://fakeimg.pl/380x180/" class="card-img-top" alt="...">
+      <img src="https://placehold.co/380x180/" class="card-img-top" alt="">
       <div class="card-body">
         <h2 class="card-title"></h2>
         <span class="card-time"></span>
