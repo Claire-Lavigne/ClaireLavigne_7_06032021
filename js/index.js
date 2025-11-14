@@ -136,22 +136,21 @@ const tagsSearch = (recipes) => {
 
   window.addTagBlue = (e) => {
     let tagValue = e.children[0].innerHTML;
-    let tag = `<button class="btn btn-primary mr-3 px-3 py-1" onclick="removeTags(this)">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
-  aria-label="Close tag"></i></button>`;
+    let tag = `<button class="btn btn-primary mr-3 px-3 py-1" onclick="removeTags(this)" aria-label="Close tag">${tagValue}<i class="bi bi-x-circle ml-2" role="img" aria-hidden="true" 
+></i></button>`;
     tagsContainer.innerHTML += tag;
     filterTags(recipes);
   };
   window.addTagRed = (e) => {
     let tagValue = e.children[0].innerHTML;
-    let tag = `<button class="btn btn-danger mr-3 px-3 py-1" onclick="removeTags(this)">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
-  aria-label="Close tag"></i></button>`;
+    let tag = `<button class="btn btn-danger mr-3 px-3 py-1" onclick="removeTags(this)" aria-label="Close tag">${tagValue}<i class="bi bi-x-circle ml-2" role="img" aria-hidden="true" ></i></button>`;
     tagsContainer.innerHTML += tag;
     filterTags(recipes);
   };
   window.addTagGreen = (e) => {
     let tagValue = e.children[0].innerHTML;
-    let tag = `<button class="btn btn-success mr-3 px-3 py-1" onclick="removeTags(this)">${tagValue}<i class="bi bi-x-circle ml-2" role="img"
-  aria-label="Close tag"></i></button>`;
+    let tag = `<button class="btn btn-success mr-3 px-3 py-1" onclick="removeTags(this)" aria-label="Close tag">${tagValue}<i class="bi bi-x-circle ml-2" role="img" aria-hidden="true" 
+  ></i></button>`;
     tagsContainer.innerHTML += tag;
     filterTags(recipes);
   };
